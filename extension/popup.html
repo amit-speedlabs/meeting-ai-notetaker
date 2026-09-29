@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><link rel="stylesheet" href="popup.css"><title>Meeting AI</title></head>
+<body>
+  <header><span class="dot"></span> Meeting AI</header>
+
+  <section id="v-config" class="hidden">
+    <p>Connect the extension to your Meeting AI Notetaker server first.</p>
+    <button class="primary" id="open-options">Open settings</button>
+  </section>
+
+  <section id="v-nomeet" class="hidden">
+    <p><b>No Google Meet detected</b> in this tab.</p>
+    <p class="muted small">Open a Google Meet call (meet.google.com/xxx-xxxx-xxx), then click the extension again.</p>
+    <div class="box small">
+      Not using Meet? <a href="#" data-app="/meetings/new?mode=offline">Use Microphone Mode</a> or
+      <a href="#" data-app="/meetings/new?mode=upload">Upload Meeting Recording</a>.
+    </div>
+  </section>
+
+  <section id="v-ready" class="hidden">
+    <div class="ok">Google Meet detected</div>
+    <label for="title">Meeting</label>
+    <input type="text" id="title" maxlength="200" placeholder="AI Olympiad Weekly Review">
+    <label for="type">Meeting type</label>
+    <select id="type"></select>
+    <label for="people">Participants <span class="muted small">(optional, comma-separated)</span></label>
+    <input type="text" id="people" placeholder="Amit, Vivek, Praveen">
+    <label class="row small" style="font-weight:400;margin-top:10px"><input type="checkbox" id="mic" checked> Include my microphone (your own voice)</label>
+    <div id="mic-note" class="small muted hidden">Chrome needs one-time microphone permission for the extension. <a href="#" id="grant-mic">Grant it</a>.</div>
+    <div class="box small muted">
+      Captures only this Meet tab's audio<span id="mic-extra"> and your microphone</span>, after you confirm.
+      Transcription: <span id="provider">…</span>.
+    </div>
+    <div style="margin-top:10px"><button class="primary" id="start">Start Taking Notes</button></div>
+    <div class="small muted" style="margin-top:6px">Status: Not Recording</div>
+  </section>
+
+  <section id="v-consent" class="hidden">
+    <b>Recording consent</b>
+    <p>This meeting will be recorded/transcribed to generate meeting notes. Please ensure all required participants have been informed and consent where applicable.</p>
+    <div class="row">
+      <button id="consent-cancel">Cancel</button>
+      <button class="primary" id="consent-ok" style="flex:1">I Understand — Start Meeting</button>
+    </div>
+  </section>
+
+  <section id="v-active" class="hidden">
+    <div id="rec-ind" class="rec"><span class="p"></span><span id="rec-label">● Recording</span></div>
+    <div class="timer" id="timer">00:00:00</div>
+    <div class="small">Meeting: <b id="a-title"></b></div>
+    <div class="small">Transcript: <span id="t-status">Active</span> · Notes: <span id="n-status">Generating</span></div>
+    <div class="small">Audio: <span id="audio-status">CONNECTED</span> <span id="pending" class="muted"></span></div>
+    <div class="small" id="mic-state"></div>
+    <div id="a-error" class="alert small hidden"></div>
+    <div class="box lines" id="lines"><span class="muted">Transcript will appear here…</span></div>
+    <div class="row" style="margin-top:10px">
+      <button id="pause">Pause</button>
+      <button id="resume" class="hidden">Resume</button>
+      <button id="stop" class="danger">Stop</button>
+      <a href="#" id="open-live" class="small" style="margin-left:auto">Open live notes</a>
+    </div>
+  </section>
+
+  <section id="v-stopping" class="hidden">
+    <p><b>Finishing…</b> uploading the remaining audio.</p>
+  </section>
+
+  <section id="v-finished" class="hidden">
+    <p class="ok">Meeting stopped.</p>
+    <p id="f-note" class="small"></p>
+    <p class="small">The final summary is being generated in the web app.</p>
+    <div class="row"><button class="primary" id="open-summary">Open meeting notes</button></div>
+    <p><a href="#" id="new-meeting" class="small">Start another</a></p>
+  </section>
+
+  <section id="v-error" class="hidden">
+    <div class="alert err" id="err-text"></div>
+    <div class="box small">
+      <b>Fallbacks</b><br>
+      <a href="#" data-app="/meetings/new?mode=offline">Use Microphone Mode</a> — capture with your microphone in the web app.<br>
+      <a href="#" data-app="/meetings/new?mode=upload">Upload Meeting Recording</a> — transcribe a saved recording.
+    </div>
+    <p><a href="#" id="err-back" class="small">Back</a></p>
+  </section>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
